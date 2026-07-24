@@ -1,0 +1,44 @@
+[
+  {
+    "id": "cat-bifold-door",
+    "name": "Bi-Fold Doors",
+    "slug": "bi-fold-door",
+    "comingSoon": false,
+    "icon": "bifold"
+  },
+  {
+    "id": "cat-sliding-door",
+    "name": "Sliding Doors",
+    "slug": "sliding-door",
+    "comingSoon": false,
+    "icon": "slidingDoor"
+  },
+  {
+    "id": "cat-sliding-windows",
+    "name": "Sliding Windows",
+    "slug": "sliding-windows",
+    "comingSoon": false,
+    "icon": "slidingWindow"
+  },
+  {
+    "id": "cat-casement-windows",
+    "name": "Casement Windows",
+    "slug": "casement-window",
+    "comingSoon": false,
+    "icon": "casement"
+  },
+  {
+    "id": "cat-tilt-turn-windows",
+    "name": "Tilt And Turn Windows",
+    "slug": "tilt-turn-window",
+    "comingSoon": false,
+    "icon": "tiltTurn"
+  },
+  {
+    "id": "cat-entrance-doors",
+    "name": "Entrance Doors",
+    "slug": "entrance-door",
+    "comingSoon": true,
+    "icon": "entrance"
+  }
+]
