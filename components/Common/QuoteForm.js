@@ -105,7 +105,7 @@ export default function QuoteForm() {
       {status === "success" && (
         <Alert status="success" mb={6} borderRadius="md">
           <AlertIcon />
-          Thanks! A Bell Air Lux team member will be in touch soon.
+          Thanks! A CASTILLO’S GLASS team member will be in touch soon.
         </Alert>
       )}
       {status === "error" && (

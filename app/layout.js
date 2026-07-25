@@ -1,9 +1,9 @@
 import Providers from "@/components/Providers";
 
 export const metadata = {
-  title: "Bell Air Lux | Premium Windows & Doors",
+  title: "CASTILLO’S GLASS | Premium Glass & Doors Services",
   description:
-    "Redefine your space with Bell Air Lux custom aluminum windows and doors.",
+    "CASTILLO'S GLASS specializes in premium glass and door services, including custom shower doors, glass railings, windows, commercial glass, and expert installation.",
 };
 
 export default function RootLayout({ children }) {
