@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -25,25 +25,42 @@ import { useRouter } from "next/navigation";
 import NextLink from "next/link";
 import ImageUpload from "@/components/Common/ImageUpload";
 
-const CATEGORY_OPTIONS = [
-  { value: "sliding-door", label: "Sliding Door" },
-  { value: "sliding-windows", label: "Sliding Windows" },
-  { value: "bi-fold-door", label: "Bi-Fold Door" },
-  { value: "casement-window", label: "Casement Window" },
-  { value: "tilt-turn-window", label: "Tilt & Turn Window" },
-  { value: "entrance-door", label: "Entrance Door" },
-];
-
-const QUICK_INFO_FIELDS = [
-  { key: "productOrigin", label: "Product Origin" },
-  { key: "itemNo", label: "Item NO." },
-  { key: "color", label: "Color" },
-  { key: "leadTime", label: "Lead Time" },
-  { key: "tradeTerms", label: "Trade terms" },
-  { key: "shippingPort", label: "Shipping Port" },
-];
-
 const MAX_THUMBNAIL_IMAGES = 5;
+
+function normalizeQuickInfoRows(initialProduct) {
+  const quickInfo = initialProduct?.quickInfo;
+
+  if (Array.isArray(quickInfo)) {
+    return quickInfo.map((row) => ({
+      label: row.label || "",
+      value: row.value || "",
+    }));
+  }
+
+  const legacyQuickInfo = {
+    productOrigin: initialProduct?.specs?.productOrigin || "",
+    itemNo: initialProduct?.specs?.productCode || initialProduct?.specs?.itemNo || "",
+    color: initialProduct?.specs?.color || "",
+    leadTime: initialProduct?.specs?.leadTime || "",
+    tradeTerms: initialProduct?.specs?.tradeTerms || "",
+    shippingPort: initialProduct?.specs?.shippingPort || "",
+    ...(quickInfo && typeof quickInfo === "object" ? quickInfo : {}),
+  };
+
+  const legacyLabels = {
+    productOrigin: "Product Origin",
+    itemNo: "Item NO.",
+    color: "Color",
+    leadTime: "Lead Time",
+    tradeTerms: "Trade terms",
+    shippingPort: "Shipping Port",
+  };
+
+  return Object.entries(legacyLabels).map(([key, label]) => ({
+    label,
+    value: legacyQuickInfo[key] || "",
+  }));
+}
 
 function emptyProduct() {
   return {
@@ -53,15 +70,8 @@ function emptyProduct() {
     shortDescription: "",
     lifestyleImage: "",
     galleryImages: [],
-    quickInfo: {
-      productOrigin: "",
-      itemNo: "",
-      color: "",
-      leadTime: "",
-      tradeTerms: "",
-      shippingPort: "",
-    },
-    hardwareConfigurations: [],
+    quickInfo: [],
+    hardwareImage: "",
     details: "",
     specifications: [],
     detailGalleryImages: [],
@@ -76,15 +86,6 @@ function normalizeProduct(initialProduct) {
   const base = emptyProduct();
   if (!initialProduct) return base;
 
-  const legacyQuickInfo = {
-    productOrigin: initialProduct.specs?.productOrigin || "",
-    itemNo: initialProduct.specs?.productCode || initialProduct.specs?.itemNo || "",
-    color: initialProduct.specs?.color || "",
-    leadTime: initialProduct.specs?.leadTime || "",
-    tradeTerms: initialProduct.specs?.tradeTerms || "",
-    shippingPort: initialProduct.specs?.shippingPort || "",
-  };
-
   const detailGalleryImages =
     initialProduct.detailGalleryImages?.length > 0
       ? initialProduct.detailGalleryImages
@@ -93,9 +94,12 @@ function normalizeProduct(initialProduct) {
   return {
     ...base,
     ...initialProduct,
-    quickInfo: { ...base.quickInfo, ...legacyQuickInfo, ...initialProduct.quickInfo },
+    quickInfo: normalizeQuickInfoRows(initialProduct),
     galleryImages: initialProduct.galleryImages || [],
-    hardwareConfigurations: initialProduct.hardwareConfigurations || [],
+    hardwareImage:
+      initialProduct.hardwareImage ||
+      initialProduct.hardwareConfigurations?.[0]?.imageUrl ||
+      "",
     specifications: initialProduct.specifications || [],
     detailGalleryImages,
   };
@@ -103,13 +107,40 @@ function normalizeProduct(initialProduct) {
 
 export default function ProductForm({ initialProduct, mode = "create" }) {
   const [product, setProduct] = useState(() => normalizeProduct(initialProduct));
+  const [categories, setCategories] = useState([]);
+  const [categoryName, setCategoryName] = useState("");
   const [saving, setSaving] = useState(false);
   const toast = useToast();
   const router = useRouter();
 
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(data.categories || []))
+      .catch(() => toast({ status: "error", title: "Failed to load categories" }));
+  }, [toast]);
+
+  useEffect(() => {
+    const selected = categories.find((c) => c.slug === product.category);
+    if (selected) setCategoryName(selected.name);
+  }, [product.category, categories]);
+
   const update = (field, value) => setProduct((p) => ({ ...p, [field]: value }));
-  const updateQuickInfo = (field, value) =>
-    setProduct((p) => ({ ...p, quickInfo: { ...p.quickInfo, [field]: value } }));
+
+  const addQuickInfoRow = () =>
+    update("quickInfo", [...product.quickInfo, { label: "", value: "" }]);
+
+  const updateQuickInfoRow = (i, field, value) => {
+    const next = [...product.quickInfo];
+    next[i] = { ...next[i], [field]: value };
+    update("quickInfo", next);
+  };
+
+  const removeQuickInfoRow = (i) =>
+    update(
+      "quickInfo",
+      product.quickInfo.filter((_, idx) => idx !== i)
+    );
 
   const updateGalleryImage = (index, value) => {
     const next = [...product.galleryImages];
@@ -152,24 +183,6 @@ export default function ProductForm({ initialProduct, mode = "create" }) {
     );
   };
 
-  const addHardware = () =>
-    update("hardwareConfigurations", [
-      ...product.hardwareConfigurations,
-      { label: "", imageUrl: "" },
-    ]);
-
-  const updateHardware = (i, field, value) => {
-    const next = [...product.hardwareConfigurations];
-    next[i] = { ...next[i], [field]: value };
-    update("hardwareConfigurations", next);
-  };
-
-  const removeHardware = (i) =>
-    update(
-      "hardwareConfigurations",
-      product.hardwareConfigurations.filter((_, idx) => idx !== i)
-    );
-
   const addSpecRow = () =>
     update("specifications", [...product.specifications, { label: "", value: "" }]);
 
@@ -190,22 +203,30 @@ export default function ProductForm({ initialProduct, mode = "create" }) {
       toast({ status: "error", title: "Product Title is required" });
       return;
     }
+    if (!categoryName.trim()) {
+      toast({ status: "error", title: "Category name is required" });
+      return;
+    }
     setSaving(true);
 
     const galleryImages = product.galleryImages.map((url) => url.trim()).filter(Boolean).slice(0, MAX_THUMBNAIL_IMAGES);
     const detailGalleryImages = product.detailGalleryImages.map((url) => url.trim()).filter(Boolean);
-    const hardwareConfigurations = product.hardwareConfigurations
+    const hardwareImage = product.hardwareImage.trim();
+    const hardwareConfigurations = hardwareImage ? [{ imageUrl: hardwareImage }] : [];
+    const quickInfo = product.quickInfo
       .map((row) => ({
         label: row.label.trim(),
-        imageUrl: row.imageUrl.trim(),
+        value: row.value.trim(),
       }))
-      .filter((row) => row.label || row.imageUrl);
+      .filter((row) => row.label || row.value);
 
     const payload = {
       ...product,
+      categoryName: categoryName.trim(),
       galleryImages,
       detailGalleryImages,
       hardwareConfigurations,
+      quickInfo,
       gridImage: product.gridImage || galleryImages[0] || product.lifestyleImage,
     };
 
@@ -221,6 +242,11 @@ export default function ProductForm({ initialProduct, mode = "create" }) {
       if (!res.ok) throw new Error(data.error || "Failed to save product");
 
       toast({ status: "success", title: mode === "edit" ? "Product updated" : "Product created" });
+      setCategories((prev) =>
+        prev.map((c) =>
+          c.slug === product.category ? { ...c, name: categoryName.trim() } : c
+        )
+      );
       router.push("/admin");
       router.refresh();
     } catch (err) {
@@ -258,13 +284,25 @@ export default function ProductForm({ initialProduct, mode = "create" }) {
               </FormControl>
               <FormControl isRequired>
                 <FormLabel>Category (Breadcrumb)</FormLabel>
-                <Select value={product.category} onChange={(e) => update("category", e.target.value)}>
-                  {CATEGORY_OPTIONS.map((c) => (
-                    <option key={c.value} value={c.value}>
-                      {c.label}
+                <Select
+                  value={product.category}
+                  onChange={(e) => update("category", e.target.value)}
+                  mb={3}
+                >
+                  {categories.map((c) => (
+                    <option key={c.slug} value={c.slug}>
+                      {c.name}
                     </option>
                   ))}
                 </Select>
+                <Input
+                  value={categoryName}
+                  onChange={(e) => setCategoryName(e.target.value)}
+                  placeholder="Category name shown in breadcrumb"
+                />
+                <Text fontSize="xs" color="brand.gray500" mt={1}>
+                  Edit the name above to update the breadcrumb on the frontend for all products in this category.
+                </Text>
               </FormControl>
             </SimpleGrid>
             <FormControl>
@@ -348,73 +386,46 @@ export default function ProductForm({ initialProduct, mode = "create" }) {
 
         {/* 3. Quick Info Table */}
         <Box>
-          <Heading fontSize="md" mb={4}>
-            Quick Info Table
-          </Heading>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-            {QUICK_INFO_FIELDS.map(({ key, label }) => (
-              <FormControl key={key}>
-                <FormLabel>{label}</FormLabel>
+          <HStack justify="space-between" mb={4}>
+            <Heading fontSize="md">Quick Info Table</Heading>
+            <IconButton aria-label="Add quick info row" icon={<AddIcon />} size="sm" onClick={addQuickInfoRow} />
+          </HStack>
+          <VStack align="stretch" spacing={3}>
+            {product.quickInfo.map((row, i) => (
+              <HStack key={i} align="flex-start">
                 <Input
-                  value={product.quickInfo[key]}
-                  onChange={(e) => updateQuickInfo(key, e.target.value)}
+                  placeholder="Label (e.g. Product Origin, Item NO.)"
+                  value={row.label}
+                  onChange={(e) => updateQuickInfoRow(i, "label", e.target.value)}
                 />
-              </FormControl>
+                <Input
+                  placeholder="Value"
+                  value={row.value}
+                  onChange={(e) => updateQuickInfoRow(i, "value", e.target.value)}
+                />
+                <IconButton
+                  aria-label="Remove row"
+                  icon={<DeleteIcon />}
+                  bg="black"
+                  color="white"
+                  onClick={() => removeQuickInfoRow(i)}
+                />
+              </HStack>
             ))}
-          </SimpleGrid>
+          </VStack>
         </Box>
 
         <Divider />
 
-        {/* 4. Hardware Configurations */}
+        {/* 4. Hardware Configuration */}
         <Box>
-          <HStack justify="space-between" mb={2}>
-            <Heading fontSize="md">Hardware Configuration</Heading>
-            <IconButton aria-label="Add hardware row" icon={<AddIcon />} size="sm" onClick={addHardware} />
-          </HStack>
-          <Text fontSize="sm" color="brand.gray500" mb={4}>
-            Add each hardware item with a label and upload its image.
-          </Text>
-          <VStack align="stretch" spacing={4}>
-            {product.hardwareConfigurations.length === 0 ? (
-              <Text fontSize="sm" color="brand.gray500">
-                No hardware items added yet.
-              </Text>
-            ) : (
-              product.hardwareConfigurations.map((row, i) => (
-                <Box key={i} border="1px solid" borderColor="brand.gray200" borderRadius="md" p={4}>
-                  <HStack justify="space-between" mb={3}>
-                    <Text fontSize="sm" fontWeight="600">
-                      Hardware Item {i + 1}
-                    </Text>
-                    <IconButton
-                      aria-label="Remove hardware item"
-                      icon={<DeleteIcon />}
-                      size="sm"
-                      bg="black"
-                      color="white"
-                      onClick={() => removeHardware(i)}
-                    />
-                  </HStack>
-                  <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-                    <FormControl>
-                      <FormLabel fontSize="sm">Label</FormLabel>
-                      <Input
-                        placeholder="e.g. High Load Bearing Roller"
-                        value={row.label}
-                        onChange={(e) => updateHardware(i, "label", e.target.value)}
-                      />
-                    </FormControl>
-                    <ImageUpload
-                      label="Image"
-                      value={row.imageUrl}
-                      onChange={(value) => updateHardware(i, "imageUrl", value)}
-                    />
-                  </SimpleGrid>
-                </Box>
-              ))
-            )}
-          </VStack>
+          <Heading fontSize="md" mb={4}>
+            Hardware Configuration
+          </Heading>
+          <ImageUpload
+            value={product.hardwareImage}
+            onChange={(value) => update("hardwareImage", value)}
+          />
         </Box>
 
         <Divider />

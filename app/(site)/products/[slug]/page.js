@@ -27,37 +27,61 @@ export async function generateMetadata({ params }) {
   };
 }
 
-function getQuickInfo(product) {
-  if (product.quickInfo) return product.quickInfo;
+function getQuickInfoRows(product) {
+  const quickInfo = product.quickInfo;
 
-  return {
-    productOrigin: product.specs?.productOrigin || "",
-    itemNo: product.specs?.productCode || product.specs?.itemNo || "",
-    color: product.specs?.color || "",
-    leadTime: product.specs?.leadTime || "",
-    tradeTerms: product.specs?.tradeTerms || "",
-    shippingPort: product.specs?.shippingPort || "",
+  if (Array.isArray(quickInfo)) {
+    return quickInfo.filter((row) => row.label?.trim() || row.value?.trim());
+  }
+
+  if (quickInfo && typeof quickInfo === "object") {
+    const legacyLabels = {
+      productOrigin: "Product Origin",
+      itemNo: "Item NO.",
+      color: "Color",
+      leadTime: "Lead Time",
+      tradeTerms: "Trade terms",
+      shippingPort: "Shipping Port",
+    };
+
+    return Object.entries(legacyLabels)
+      .map(([key, label]) => ({ label, value: quickInfo[key] || "" }))
+      .filter((row) => row.value);
+  }
+
+  const specs = product.specs || {};
+  const legacyLabels = {
+    productOrigin: "Product Origin",
+    itemNo: "Item NO.",
+    color: "Color",
+    leadTime: "Lead Time",
+    tradeTerms: "Trade terms",
+    shippingPort: "Shipping Port",
   };
+
+  const legacyValues = {
+    productOrigin: specs.productOrigin || "",
+    itemNo: specs.productCode || specs.itemNo || "",
+    color: specs.color || "",
+    leadTime: specs.leadTime || "",
+    tradeTerms: specs.tradeTerms || "",
+    shippingPort: specs.shippingPort || "",
+  };
+
+  return Object.entries(legacyLabels)
+    .map(([key, label]) => ({ label, value: legacyValues[key] || "" }))
+    .filter((row) => row.value);
 }
 
-function QuickInfoTable({ quickInfo }) {
-  const rows = [
-    ["Product Origin", quickInfo.productOrigin],
-    ["Item NO.", quickInfo.itemNo],
-    ["Color", quickInfo.color],
-    ["Lead Time", quickInfo.leadTime],
-    ["Trade terms", quickInfo.tradeTerms],
-    ["Shipping Port", quickInfo.shippingPort],
-  ].filter(([, value]) => value);
-
+function QuickInfoTable({ rows }) {
   if (rows.length === 0) return null;
 
   return (
     <Box border="1px solid" borderColor="brand.gray200">
       <Table variant="unstyled" size="sm">
         <Tbody>
-          {rows.map(([label, value], index) => (
-            <Tr key={label} bg={index % 2 === 0 ? "white" : "brand.gray50"}>
+          {rows.map((row, index) => (
+            <Tr key={`${row.label}-${index}`} bg={index % 2 === 0 ? "white" : "brand.gray50"}>
               <Td
                 fontWeight="600"
                 fontSize="sm"
@@ -68,7 +92,7 @@ function QuickInfoTable({ quickInfo }) {
                 borderColor="brand.gray200"
                 fontFamily="Montserrat, sans-serif"
               >
-                {label}
+                {row.label}
               </Td>
               <Td
                 fontSize="sm"
@@ -78,7 +102,7 @@ function QuickInfoTable({ quickInfo }) {
                 borderColor="brand.gray200"
                 fontFamily="Montserrat, sans-serif"
               >
-                {value}
+                {row.value}
               </Td>
             </Tr>
           ))}
@@ -93,8 +117,9 @@ export default async function ProductDetailPage({ params }) {
   if (!product || product.status === "draft") return notFound();
 
   const category = await getCategoryBySlug(product.category);
-  const quickInfo = getQuickInfo(product);
+  const quickInfoRows = getQuickInfoRows(product);
   const galleryImages = [product.lifestyleImage, ...(product.galleryImages || [])].filter(Boolean);
+  const hardwareImage = product.hardwareConfigurations?.[0]?.imageUrl;
   const detailImages =
     product.detailGalleryImages?.length > 0
       ? product.detailGalleryImages
@@ -162,9 +187,9 @@ export default async function ProductDetailPage({ params }) {
               </Text>
             )}
 
-            <QuickInfoTable quickInfo={quickInfo} />
+            <QuickInfoTable rows={quickInfoRows} />
 
-            {product.hardwareConfigurations?.length > 0 && (
+            {hardwareImage && (
               <Box>
                 <Heading
                   as="h3"
@@ -175,25 +200,14 @@ export default async function ProductDetailPage({ params }) {
                 >
                   Hardware Configuration
                 </Heading>
-                <SimpleGrid columns={{ base: 2, sm: 3, md: 5 }} spacing={4}>
-                  {product.hardwareConfigurations.map((item, index) => (
-                    <VStack key={`${item.label}-${index}`} spacing={2} align="center" textAlign="center">
-                      <Box w="full" maxW="80px">
-                        <AspectRatio ratio={1}>
-                          <Image
-                            src={item.imageUrl}
-                            alt={item.label}
-                            objectFit="contain"
-                            fallbackSrc="https://via.placeholder.com/80"
-                          />
-                        </AspectRatio>
-                      </Box>
-                      <Text fontSize="xs" lineHeight="1.4" fontFamily="Montserrat, sans-serif">
-                        {item.label}
-                      </Text>
-                    </VStack>
-                  ))}
-                </SimpleGrid>
+                <Image
+                  src={hardwareImage}
+                  alt=""
+                  objectFit="contain"
+                  w="full"
+                  maxH="320px"
+                  fallbackSrc="https://via.placeholder.com/400x200"
+                />
               </Box>
             )}
 

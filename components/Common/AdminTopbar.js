@@ -3,6 +3,7 @@
 import { Box, Container, Flex, Heading, Text, HStack, Link as ChakraLink, Button } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
+import BrandText from "@/components/Common/BrandText";
 
 export default function AdminTopbar() {
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function AdminTopbar() {
           <Box>
             <Heading fontSize="lg">Admin Dashboard</Heading>
             <Text fontSize="sm" color="brand.gray500">
-            Castillo’s Glass Product Manager
+              <BrandText>Castillo’s Glass Product Manager</BrandText>
             </Text>
           </Box>
           <HStack spacing={6}>

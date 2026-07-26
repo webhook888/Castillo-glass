@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getProducts, createProduct } from "@/lib/db";
+import { getProducts, createProduct, updateCategoryBySlug } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +20,13 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const product = await createProduct(body);
+    const { categoryName, ...productData } = body;
+
+    if (categoryName?.trim() && productData.category) {
+      await updateCategoryBySlug(productData.category, { name: categoryName.trim() });
+    }
+
+    const product = await createProduct(productData);
     return NextResponse.json({ product }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });

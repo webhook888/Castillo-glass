@@ -13,6 +13,7 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
 import { HERO_SLIDES } from "@/constants/hero";
+import BrandText from "@/components/Common/BrandText";
 
 const AUTOPLAY_MS = 6000;
 
@@ -112,7 +113,7 @@ export default function HeroSlider() {
           fontSize={{ base: "md", md: "lg" }}
           maxW="650px"
         >
-          {slide.subheading}
+          <BrandText>{slide.subheading}</BrandText>
         </Text>
 
         <Button

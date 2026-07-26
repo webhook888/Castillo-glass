@@ -1,4 +1,5 @@
 import Providers from "@/components/Providers";
+import { brandFont } from "@/lib/fonts";
 
 export const metadata = {
   title: "CASTILLO’S GLASS | Premium Glass & Doors Services",
@@ -8,7 +9,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={brandFont.variable}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -16,7 +17,7 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>
+      <body className={brandFont.variable}>
         <Providers>{children}</Providers>
       </body>
     </html>

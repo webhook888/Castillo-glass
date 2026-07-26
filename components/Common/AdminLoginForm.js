@@ -14,6 +14,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import BrandText from "@/components/Common/BrandText";
 
 export default function AdminLoginForm() {
   const [username, setUsername] = useState("");
@@ -58,7 +59,7 @@ export default function AdminLoginForm() {
                 Admin Login
               </Heading>
               <Text fontSize="16px" color="black">
-                Sign in to access the Castillo’s Glass dashboard
+                <BrandText>Sign in to access the Castillo’s Glass dashboard.</BrandText>
               </Text>
             </Box>
 

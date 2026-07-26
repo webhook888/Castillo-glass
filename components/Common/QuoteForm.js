@@ -19,6 +19,7 @@ import {
   AlertIcon,
   Text,
 } from "@chakra-ui/react";
+import BrandText from "@/components/Common/BrandText";
 
 const WINDOW_DOOR_TYPES = ["Shower doors", "Residential", "Commercial", "Glass railing","Cable system","Window and door","Swichtable Glass","Custom glass"];
 
@@ -105,7 +106,7 @@ export default function QuoteForm() {
       {status === "success" && (
         <Alert status="success" mb={6} borderRadius="md">
           <AlertIcon />
-          Thanks! A CASTILLO’S GLASS team member will be in touch soon.
+          <BrandText>Thanks! A CASTILLO’S GLASS team member will be in touch soon.</BrandText>
         </Alert>
       )}
       {status === "error" && (

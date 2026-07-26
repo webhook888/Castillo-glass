@@ -1,4 +1,5 @@
 import { Box, Container, Heading, Text, SimpleGrid, Image, AspectRatio } from "@chakra-ui/react";
+import BrandText from "@/components/Common/BrandText";
 
 export const metadata = { title: "About Us | Bell Air Lux" };
 
@@ -9,12 +10,12 @@ export default function AboutUsPage() {
       
           <Box>
             <Heading fontSize={{ base: "2xl", md: "30px" }} mb={5} fontFamily={'Montserrat'} borderBottom={'2px solid black'} pb={'25px'}>
-            Welcome to Castillo's Glass Services
+              <BrandText>Welcome to Castillo's Glass Services</BrandText>
             </Heading>
             <Text color="black" mb={'24px'} fontFamily={'Poppins'}lineHeight={'32px'}>
-            At Castillo’s Glass Services, we are committed to delivering high-quality glass solutions that combine style, durability, 
-            and exceptional craftsmanship. Whether you need custom glass installations, elegant shower doors, residential windows, 
-            commercial storefronts, or modern glass railings, our experienced team provides reliable service tailored to your unique needs.
+              <BrandText>At Castillo’s Glass Services, we are committed to delivering high-quality glass solutions that combine style, durability,
+              and exceptional craftsmanship. Whether you need custom glass installations, elegant shower doors, residential windows,
+              commercial storefronts, or modern glass railings, our experienced team provides reliable service tailored to your unique needs.</BrandText>
             </Text>
             <Text color="black" mb={'24px'} fontFamily={'Poppins'}lineHeight={'32px'}>
             We proudly serve both residential and commercial clients, offering professional installation, replacement, and repair services using premium-quality materials. 
@@ -30,8 +31,8 @@ export default function AboutUsPage() {
             No matter the size of your project, our goal is to exceed your expectations with quality products and professional service you can trust.
             </Text>
             <Text color="black"  fontFamily={'Poppins'}lineHeight={'32px'}>
-            Choose Castillo’s Glass Services for expert craftsmanship, customized solutions, and a commitment to excellence. 
-            Contact us today to discuss your project and discover how our premium glass services can transform your home or business.
+              <BrandText>Choose Castillo’s Glass Services for expert craftsmanship, customized solutions, and a commitment to excellence.
+              Contact us today to discuss your project and discover how our premium glass services can transform your home or business.</BrandText>
             </Text>
           </Box>
        

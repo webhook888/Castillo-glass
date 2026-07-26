@@ -24,6 +24,7 @@ import {
   COMPANY_ADDRESS,
   FOOTER_COLUMNS,
 } from "@/constants/site";
+import BrandName from "@/components/Common/BrandName";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -123,7 +124,7 @@ export default function Footer() {
           color="black"
           fontFamily={'Poppins'} mt={16}
           borderTop={'1px solid grey'} pt={'13px'}>
-          © {SITE_NAME.toUpperCase()} {new Date().getFullYear()}
+          © <BrandName>{SITE_NAME.toUpperCase()}</BrandName> {new Date().getFullYear()}
         </Text>
       </Container>
 
