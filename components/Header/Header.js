@@ -28,9 +28,15 @@ function Logo() {
   return (
     <HStack as={NextLink} href="/" spacing={2} align="center">
       <Box w={'230px'} h={'50px'} flexShrink={0}>
-        <Image src="/images/logonew.png" alt="Logo" />
+        <Image
+          src="/images/logonew.png"
+          alt="Logo"
+          w="100%"
+          h="100%"
+          objectFit="contain"
+        />
       </Box>
-      
+
     </HStack>
   );
 }
