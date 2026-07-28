@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Container,
@@ -42,17 +42,9 @@ function Logo() {
 }
 
 export default function Header() {
-  const [categories, setCategories] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => setCategories(data.categories || []))
-      .catch(() => setCategories([]));
-  }, []);
 
   return (
     <Box
@@ -117,7 +109,7 @@ export default function Header() {
       </Container>
 
       {menuOpen && (
-        <MegaMenu categories={categories} onNavigate={() => setMenuOpen(false)} />
+        <MegaMenu />
       )}
 
       <Drawer isOpen={isOpen} placement="right" onClose={() => setIsOpen(false)}>

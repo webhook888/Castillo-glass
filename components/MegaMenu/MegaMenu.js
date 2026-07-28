@@ -1,10 +1,9 @@
 "use client";
 
-import { Box, Container, Heading, SimpleGrid, Text, VStack } from "@chakra-ui/react";
-import NextLink from "next/link";
-import CategoryIcon from "@/components/Common/CategoryIcon";
+import { Box, Container, Heading, Image, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { STATIC_PRODUCT_CATEGORIES } from "@/constants/productCategories";
 
-export default function MegaMenu({ categories = [], onNavigate }) {
+export default function MegaMenu() {
   return (
     <Box
       position="absolute"
@@ -31,26 +30,24 @@ export default function MegaMenu({ categories = [], onNavigate }) {
           </Box>
           <Box gridColumn={{ md: "2 / span 3" }}>
             <SimpleGrid columns={{ base: 2, md: 4 }} spacing={8}>
-              {categories.map((cat) => (
+              {STATIC_PRODUCT_CATEGORIES.map((category) => (
                 <VStack
-                  as={NextLink}
-                  key={cat.id}
-                  href={cat.comingSoon ? "#" : `/products/category/${cat.slug}`}
-                  onClick={onNavigate}
+                  key={category.name}
+                  align="center"
+                  justify="center"
                   spacing={3}
-                  opacity={cat.comingSoon ? 0.5 : 1}
-                  pointerEvents={cat.comingSoon ? "none" : "auto"}
-                  _hover={{ opacity: cat.comingSoon ? 0.5 : 0.7 }}
-                  transition="opacity 0.2s"
+                  minH="130px"
                 >
-                  <CategoryIcon name={cat.icon} boxSize="60px" />
-                  <Text fontWeight="600" textAlign="center" fontSize="sm">
-                    {cat.name}
-                    {cat.comingSoon && (
-                      <Text as="span" display="block" fontWeight="400" color="brand.gray500">
-                        Coming soon
-                      </Text>
-                    )}
+                  <Image
+                    src={category.image}
+                    alt={category.name}
+                    w="90px"
+                    h="99px"
+                    objectFit="cover"
+                    borderRadius="sm"
+                  />
+                  <Text fontWeight="600" fontSize="sm" textAlign="center">
+                    {category.name}
                   </Text>
                 </VStack>
               ))}

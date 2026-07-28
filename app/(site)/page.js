@@ -4,23 +4,11 @@ import CategoryCard from "@/components/ProductCard/CategoryCard";
 import Slider from "@/components/CategorySlider/Slider";
 import CategoryIcon from "@/components/Common/CategoryIcon";
 import WhyChooseUs from "@/components/Common/WhyChooseUs";
-import { getCategories, getProducts } from "@/lib/db";
-
-const CATEGORY_DESCRIPTION =
-  "With a sleek and modern design, our products redefine the concept of seamless transitions between indoor and outdoor spaces.";
-
-const CATEGORY_IMAGES = {
-  "bi-fold-door": "https://images.unsplash.com/photo-1600566752734-2a0cd53d5c99?w=800",
-  "sliding-door": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800",
-  "sliding-windows": "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800",
-  "casement-window": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800",
-  "tilt-turn-window": "https://images.unsplash.com/photo-1600566752734-2a0cd53d5c99?w=800",
-  "entrance-door": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800",
-};
+import { getCategories } from "@/lib/db";
+import { STATIC_PRODUCT_CATEGORIES } from "@/constants/productCategories";
 
 export default async function HomePage() {
   const categories = await getCategories();
-  const products = await getProducts({ status: "published" });
 
   return (
     <Box>
@@ -34,14 +22,13 @@ export default async function HomePage() {
             Product by Categories
           </Heading>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacingX={8} spacingY={12}>
-            {categories.map((cat) => (
+            {STATIC_PRODUCT_CATEGORIES.map((category) => (
               <CategoryCard
-                key={cat.id}
-                name={cat.name}
-                image={CATEGORY_IMAGES[cat.slug]}
-                description={CATEGORY_DESCRIPTION}
-                href={`/products/category/${cat.slug}`}
-                comingSoon={cat.comingSoon}
+                key={category.slug}
+                name={category.name}
+                image={category.image}
+                description={category.description}
+                href={`/products/category/${category.slug}`}
               />
             ))}
           </SimpleGrid>

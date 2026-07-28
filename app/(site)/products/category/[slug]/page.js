@@ -3,14 +3,20 @@ import NextLink from "next/link";
 import { notFound } from "next/navigation";
 import ProductCard from "@/components/ProductCard/ProductCard";
 import { getCategoryBySlug, getProducts } from "@/lib/db";
+import { STATIC_PRODUCT_CATEGORIES } from "@/constants/productCategories";
+
+async function resolveCategory(slug) {
+  const databaseCategory = await getCategoryBySlug(slug);
+  return databaseCategory || STATIC_PRODUCT_CATEGORIES.find((category) => category.slug === slug) || null;
+}
 
 export async function generateMetadata({ params }) {
-  const category = await getCategoryBySlug(params.slug);
+  const category = await resolveCategory(params.slug);
   return { title: category ? `${category.name} | Bell Air Lux` : "Bell Air Lux" };
 }
 
 export default async function CategoryPage({ params }) {
-  const category = await getCategoryBySlug(params.slug);
+  const category = await resolveCategory(params.slug);
   if (!category) return notFound();
 
   const products = await getProducts({ category: params.slug, status: "published" });
