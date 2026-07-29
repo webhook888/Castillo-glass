@@ -13,10 +13,31 @@ export default function Slider({ children, itemWidth = 260, gap = 24, showDots =
     (direction) => {
       const el = trackRef.current;
       if (!el) return;
+
+      const isAtStart = el.scrollLeft <= 2;
+      const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+
+      if (direction > 0 && isAtEnd) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+        return;
+      }
+
+      if (direction < 0 && isAtStart) {
+        el.scrollTo({ left: el.scrollWidth, behavior: "smooth" });
+        return;
+      }
+
       el.scrollBy({ left: direction * (itemWidth + gap), behavior: "smooth" });
     },
     [itemWidth, gap]
   );
+
+  useEffect(() => {
+    if (childCount < 2) return undefined;
+
+    const interval = setInterval(() => scrollByAmount(1), 4000);
+    return () => clearInterval(interval);
+  }, [childCount, scrollByAmount]);
 
   useEffect(() => {
     const el = trackRef.current;
@@ -57,7 +78,9 @@ export default function Slider({ children, itemWidth = 260, gap = 24, showDots =
         top="40%"
         transform="translateY(-50%)"
         borderRadius="full"
-        bg="white"
+        bg="#F0F5FA"
+        color="black"
+        _hover={{ bg: "#F0F5FA" }}
         boxShadow="md"
         onClick={() => scrollByAmount(-1)}
         display={{ base: "none", md: "inline-flex" }}
@@ -70,7 +93,9 @@ export default function Slider({ children, itemWidth = 260, gap = 24, showDots =
         top="40%"
         transform="translateY(-50%)"
         borderRadius="full"
-        bg="white"
+        bg="#F0F5FA"
+        color="black"
+        _hover={{ bg: "#F0F5FA" }}
         boxShadow="md"
         onClick={() => scrollByAmount(1)}
         display={{ base: "none", md: "inline-flex" }}

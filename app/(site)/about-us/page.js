@@ -1,5 +1,5 @@
-import { Box, Container, Heading, Text, SimpleGrid, Image, AspectRatio } from "@chakra-ui/react";
 import BrandText from "@/components/Common/BrandText";
+import { Box, Container, Heading, Text } from "@chakra-ui/react";
 
 export const metadata = { title: "About Us | Castillo's Glass" };
 
@@ -9,7 +9,7 @@ export default function AboutUsPage() {
       <Container maxW="1280px">
 
         <Box>
-          <Heading fontSize={{ base: "2xl", md: "30px" }} mb={5} fontFamily={'Montserrat'} borderBottom={'2px solid black'} pb={'25px'}>
+          <Heading fontSize={{ base: "2xl", md: "30px" }} mb={5} fontFamily="brand" fontWeight="400" borderBottom={'2px solid black'} pb={'25px'}>
             <BrandText fontFamily={'jaguares_1'}>Welcome to Castillo's Glass Services</BrandText>
           </Heading>
           <Text color="black" mb={'24px'} fontFamily={'Poppins'} lineHeight={'32px'}>

@@ -49,15 +49,12 @@ export default function Footer() {
       <Container maxW="1400px">
         <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={10}>
           <Box>
-            <Box mb={'35px'}>
-              <Box w={'230px'} h={'50px'} flexShrink={0}>
+            <Box mb={"35px"}>
+              <Box w={"230px"} h={"50px"} flexShrink={0}>
                 <Image src="/images/logonew.png" alt="Logo" />
               </Box>
-
             </Box>
-            <Text fontSize="16px"
-              color="black"
-              fontFamily={'Poppins'} >
+            <Text fontSize="16px" color="black" fontFamily={"Poppins"}>
               {COMPANY_ADDRESS.line1}
               <br />
               {COMPANY_ADDRESS.line2}
@@ -68,7 +65,12 @@ export default function Footer() {
 
           {FOOTER_COLUMNS.map((col) => (
             <Box key={col.title}>
-              <Heading fontSize="19px" mb={4} fontFamily={'Poppins'} fontWeight={'600'} >
+              <Heading
+                fontSize="19px"
+                mb={4}
+                fontFamily={"Poppins"}
+                fontWeight={"600"}
+              >
                 {col.title}
               </Heading>
               <Stack spacing={2}>
@@ -79,7 +81,7 @@ export default function Footer() {
                     href={link.href}
                     fontSize="16px"
                     color="black"
-                    fontFamily={'Poppins'}
+                    fontFamily={"Poppins"}
                     _hover={{ color: "brand.black" }}
                   >
                     {link.label}
@@ -93,9 +95,7 @@ export default function Footer() {
             <Heading fontSize="md" mb={4}>
               Newsletter
             </Heading>
-            <Text fontSize="16px"
-              color="black"
-              fontFamily={'Poppins'} mb={4}>
+            <Text fontSize="16px" color="black" fontFamily={"Poppins"} mb={4}>
               Stay up to date with our latest news, receive exclusive deals, and
               more.
             </Text>
@@ -113,18 +113,27 @@ export default function Footer() {
               size="sm"
               borderRadius="md"
               w="full"
-              minH={'45px'}
+              minH={"45px"}
             >
               SUBSCRIBE
             </Button>
           </Box>
         </SimpleGrid>
 
-        <Text textAlign="center" fontSize="16px"
+        <Text
+          textAlign="center"
+          fontSize="16px"
           color="black"
-          fontFamily={'Poppins'} mt={16}
-          borderTop={'1px solid grey'} pt={'13px'}>
-          © <BrandName>{SITE_NAME.toUpperCase()}</BrandName> {new Date().getFullYear()}
+          fontFamily={"Poppins"}
+          mt={16}
+          borderTop={"1px solid grey"}
+          pt={"13px"}
+        >
+          ©{" "}
+          <BrandName>
+            {SITE_NAME.toUpperCase()}
+          </BrandName>{" "}
+          {new Date().getFullYear()}
         </Text>
       </Container>
 

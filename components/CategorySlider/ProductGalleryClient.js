@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Container, Flex, Heading, IconButton, SimpleGrid, Image, AspectRatio } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
@@ -10,6 +10,16 @@ export default function ProductGalleryClient({ images }) {
   const [page, setPage] = useState(0);
   const pageCount = Math.max(Math.ceil(images.length / PAGE_SIZE), 1);
   const visible = images.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
+
+  useEffect(() => {
+    if (pageCount < 2) return undefined;
+
+    const interval = setInterval(() => {
+      setPage((currentPage) => (currentPage + 1) % pageCount);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [pageCount]);
 
   return (
     <Box py={{ base: 12, md: 16 }} bg="brand.gray50">
@@ -22,16 +32,20 @@ export default function ProductGalleryClient({ images }) {
               icon={<ChevronLeftIcon />}
               borderRadius="full"
               variant="outline"
-              isDisabled={page === 0}
-              onClick={() => setPage((p) => Math.max(p - 1, 0))}
+              bg="#F0F5FA"
+              color="black"
+              isDisabled={pageCount < 2}
+              onClick={() => setPage((p) => (p - 1 + pageCount) % pageCount)}
             />
             <IconButton
               aria-label="Next page"
               icon={<ChevronRightIcon />}
               borderRadius="full"
               variant="outline"
-              isDisabled={page >= pageCount - 1}
-              onClick={() => setPage((p) => Math.min(p + 1, pageCount - 1))}
+              bg="#F0F5FA"
+              color="black"
+              isDisabled={pageCount < 2}
+              onClick={() => setPage((p) => (p + 1) % pageCount)}
             />
           </Flex>
         </Flex>

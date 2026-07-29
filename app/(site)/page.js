@@ -1,15 +1,13 @@
-import { Box, Container, Heading, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Container, Heading, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import NextLink from "next/link";
 import HeroSlider from "@/components/Hero/HeroSlider";
 import CategoryCard from "@/components/ProductCard/CategoryCard";
 import Slider from "@/components/CategorySlider/Slider";
-import CategoryIcon from "@/components/Common/CategoryIcon";
 import WhyChooseUs from "@/components/Common/WhyChooseUs";
-import { getCategories } from "@/lib/db";
 import { STATIC_PRODUCT_CATEGORIES } from "@/constants/productCategories";
+import { MEGA_MENU_IMAGES } from "@/constants/megaMenuImages";
 
-export default async function HomePage() {
-  const categories = await getCategories();
-
+export default function HomePage() {
   return (
     <Box>
       <HeroSlider />
@@ -45,21 +43,32 @@ export default async function HomePage() {
             Explore our collection of stunning glass projects and discover ideas to transform your home or business. From modern shower doors to custom glass installations, find the perfect design that matches your style and vision.
           </Text>
           <Slider itemWidth={260}>
-            {categories.map((cat) => (
+            {STATIC_PRODUCT_CATEGORIES.map((category, index) => (
               <Box
-                key={cat.id}
-                as="a"
-                href={cat.comingSoon ? "#" : `/products/category/${cat.slug}`}
+                key={category.slug}
                 display="block"
                 bg="white"
                 borderRadius="md"
-                p={10}
                 textAlign="center"
                 boxShadow="sm"
+                overflow="hidden"
               >
-                <CategoryIcon name={cat.icon} boxSize="80px" />
-                <Text fontWeight="600" mt={6}>
-                  {cat.name}
+                <Image
+                  src={MEGA_MENU_IMAGES[index]}
+                  alt={category.name}
+                  w="100%"
+                  h="220px"
+                  objectFit="cover"
+                />
+                <Text
+                  as={NextLink}
+                  href={`/products/category/${category.slug}`}
+                  display="block"
+                  fontWeight="600"
+                  p={5}
+                  _hover={{ color: "black" }}
+                >
+                  {category.name}
                 </Text>
               </Box>
             ))}

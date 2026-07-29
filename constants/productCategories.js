@@ -7,8 +7,8 @@ export const STATIC_PRODUCT_CATEGORIES = [
       "Transform your bathroom with custom shower doors designed for elegance, durability, and everyday comfort. Enjoy premium glass solutions tailored to match your style and space perfectly.",
   },
   {
-    name: "Doors Bifold , entrance , sliders",
-    slug: "Doors Bifold , entrance , sliders",
+    name: "Doors Bifold",
+    slug: "Doors Bifold",
     image: "/images/bifold.jpeg",
     description:
       "Upgrade your home with modern bifold, entrance, and sliding glass doors that maximize natural light, functionality, and contemporary design for every living space.",

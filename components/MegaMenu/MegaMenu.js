@@ -2,6 +2,7 @@
 
 import { Box, Container, Heading, Image, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { STATIC_PRODUCT_CATEGORIES } from "@/constants/productCategories";
+import { MEGA_MENU_IMAGES } from "@/constants/megaMenuImages";
 
 export default function MegaMenu() {
   return (
@@ -30,7 +31,7 @@ export default function MegaMenu() {
           </Box>
           <Box gridColumn={{ md: "2 / span 3" }}>
             <SimpleGrid columns={{ base: 2, md: 4 }} spacing={8}>
-              {STATIC_PRODUCT_CATEGORIES.map((category) => (
+              {STATIC_PRODUCT_CATEGORIES.map((category, index) => (
                 <VStack
                   key={category.name}
                   align="center"
@@ -39,7 +40,7 @@ export default function MegaMenu() {
                   minH="130px"
                 >
                   <Image
-                    src={category.image}
+                    src={MEGA_MENU_IMAGES[index]}
                     alt={category.name}
                     w="90px"
                     h="99px"
