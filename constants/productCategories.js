@@ -2,28 +2,28 @@ export const STATIC_PRODUCT_CATEGORIES = [
   {
     name: "Shower Doors",
     slug: "shower-doors",
-    image: "/images/shower.jpeg",
+    image: "/images/shower.JPEG",
     description:
       "Transform your bathroom with custom shower doors designed for elegance, durability, and everyday comfort. Enjoy premium glass solutions tailored to match your style and space perfectly.",
   },
   {
     name: "Doors Bifold , entrance , sliders",
     slug: "Doors Bifold , entrance , sliders",
-    image: "/images/bifold.jpeg",
+    image: "/images/bifold.JPEG",
     description:
       "Upgrade your home with modern bifold, entrance, and sliding glass doors that maximize natural light, functionality, and contemporary design for every living space.",
   },
   {
     name: "Commercial",
     slug: "commercial",
-    image: "/images/commercial.jpeg",
+    image: "/images/commercial.JPEG",
     description:
       "Enhance your commercial property with high-quality glass systems built for durability, safety, and professional appeal. Custom solutions designed to meet your business needs.",
   },
   {
     name: "Glass railing",
     slug: "glass-railing",
-    image: "/images/glassrailing.jpeg",
+    image: "/images/glassrailing.JPEG",
     description:
       "Create open, secure spaces with premium glass railings for staircases, balconies, decks, and patios. Enjoy unobstructed views with lasting strength and modern elegance.",
   },
@@ -37,7 +37,7 @@ export const STATIC_PRODUCT_CATEGORIES = [
   {
     name: "Window and doors",
     slug: "window-and-doors",
-    image: "/images/windows.jpeg",
+    image: "/images/windows.JPEG",
     description:
       "Improve comfort, energy efficiency, and curb appeal with custom windows and doors crafted for lasting performance. Designed to complement every architectural style beautifully.",
   },
@@ -51,7 +51,7 @@ export const STATIC_PRODUCT_CATEGORIES = [
   {
     name: "Custom glass",
     slug: "custom-glass",
-    image: "/images/custom.jpeg",
+    image: "/images/custom.JPEG",
     description:
       "Bring your vision to life with custom glass solutions tailored for residential and commercial projects. Precision-crafted designs that combine beauty, functionality, and durability.",
   },
