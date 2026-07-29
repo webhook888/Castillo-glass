@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { saveSubmission } from "@/lib/db";
+import { sendFormNotification } from "@/lib/mailer";
 
 const REQUIRED_FIELDS = [
   "firstName",
@@ -21,7 +22,7 @@ export async function POST(request) {
     if (missing.length > 0) {
       return NextResponse.json(
         { error: `Missing required fields: ${missing.join(", ")}` },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -29,13 +30,24 @@ export async function POST(request) {
     if (!emailPattern.test(body.email)) {
       return NextResponse.json(
         { error: "Please provide a valid email address" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
+    await sendFormNotification("Get a Quote", body);
     const entry = await saveSubmission("quote", body);
-    return NextResponse.json({ success: true, submission: entry }, { status: 201 });
+    return NextResponse.json(
+      { success: true, submission: entry },
+      { status: 201 },
+    );
   } catch (error) {
-    return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
+    console.error("QUOTE API ERROR:", error);
+  
+    return NextResponse.json(
+      {
+        error: error.message,
+      },
+      { status: 500 }
+    );
   }
 }

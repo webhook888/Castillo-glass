@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { saveSubmission } from "@/lib/db";
+import { sendFormNotification } from "@/lib/mailer";
 
 const REQUIRED_FIELDS = ["firstName", "lastName", "phone", "email"];
 
@@ -23,6 +24,7 @@ export async function POST(request) {
       );
     }
 
+    await sendFormNotification("Contact Us", body);
     const entry = await saveSubmission("contact", body);
     return NextResponse.json({ success: true, submission: entry }, { status: 201 });
   } catch (error) {
