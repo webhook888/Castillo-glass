@@ -18,6 +18,7 @@ import {
 import NextLink from "next/link";
 import ProductImageGallery from "@/components/ProductDetail/ProductImageGallery";
 import { getProductBySlug, getCategoryBySlug } from "@/lib/db";
+import { STATIC_PRODUCT_CATEGORIES } from "@/constants/productCategories";
 
 export async function generateMetadata({ params }) {
   const product = await getProductBySlug(params.slug);
@@ -116,7 +117,9 @@ export default async function ProductDetailPage({ params }) {
   const product = await getProductBySlug(params.slug);
   if (!product || product.status === "draft") return notFound();
 
-  const category = await getCategoryBySlug(product.category);
+  const category =
+    (await getCategoryBySlug(product.category)) ||
+    STATIC_PRODUCT_CATEGORIES.find((item) => item.slug === product.category);
   const quickInfoRows = getQuickInfoRows(product);
   const galleryImages = [product.lifestyleImage, ...(product.galleryImages || [])].filter(Boolean);
   const hardwareImage = product.hardwareConfigurations?.[0]?.imageUrl;

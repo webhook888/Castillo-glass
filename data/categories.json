@@ -1,44 +1,59 @@
 [
   {
-    "id": "cat-bifold-door",
-    "name": "Bi-Fold Doors",
-    "slug": "bi-fold-door",
-    "comingSoon": false,
-    "icon": "bifold"
-  },
-  {
-    "id": "cat-sliding-door",
-    "name": "Sliding Doors",
-    "slug": "sliding-door",
+    "id": "cat-shower-doors",
+    "name": "Shower Doors",
+    "slug": "shower-doors",
     "comingSoon": false,
     "icon": "slidingDoor"
   },
   {
-    "id": "cat-sliding-windows",
-    "name": "Sliding Windows",
-    "slug": "sliding-windows",
+    "id": "cat-doors-bifold",
+    "name": "Doors Bifold",
+    "slug": "doors-bifold",
     "comingSoon": false,
-    "icon": "slidingWindow"
+    "icon": "bifold"
   },
   {
-    "id": "cat-casement-windows",
-    "name": "Casement Windows",
-    "slug": "casement-window",
+    "id": "cat-commercial",
+    "name": "Commercial",
+    "slug": "commercial",
     "comingSoon": false,
     "icon": "casement"
   },
   {
-    "id": "cat-tilt-turn-windows",
-    "name": "Tilt And Turn Windows",
-    "slug": "tilt-turn-window",
+    "id": "cat-glass-railing",
+    "name": "Glass Railing",
+    "slug": "glass-railing",
     "comingSoon": false,
     "icon": "tiltTurn"
   },
   {
-    "id": "cat-entrance-doors",
-    "name": "Entrance Doors",
-    "slug": "entrance-door",
-    "comingSoon": true,
-    "icon": "entrance"
+    "id": "cat-cable-system",
+    "name": "Cable System",
+    "slug": "cable-system",
+    "comingSoon": false,
+    "icon": "tiltTurn"
+  },
+  {
+    "id": "cat-window-and-doors",
+    "name": "Window and Doors",
+    "slug": "window-and-doors",
+    "comingSoon": false,
+    "icon": "slidingWindow"
+  },
+  {
+    "id": "cat-switchtable-glass",
+    "name": "Switchtable Glass",
+    "slug": "switchtable-glass",
+    "comingSoon": false,
+    "icon": "casement"
+  },
+  {
+    "id": "cat-custom-glass",
+    "name": "Custom Glass",
+    "slug": "custom-glass",
+    "comingSoon": false,
+    "icon": "casement"
   }
 ]
+ 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getProductBySlug, updateProduct, deleteProduct, updateCategoryBySlug } from "@/lib/db";
+import { getProductBySlug, updateProduct, deleteProduct } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -18,13 +18,7 @@ export async function PUT(request, { params }) {
 
   try {
     const body = await request.json();
-    const { categoryName, ...productData } = body;
-
-    if (categoryName?.trim() && productData.category) {
-      await updateCategoryBySlug(productData.category, { name: categoryName.trim() });
-    }
-
-    const updated = await updateProduct(params.slug, productData);
+    const updated = await updateProduct(params.slug, body);
     if (!updated) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }

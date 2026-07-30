@@ -8,7 +8,7 @@ export const STATIC_PRODUCT_CATEGORIES = [
   },
   {
     name: "Doors Bifold",
-    slug: "Doors Bifold",
+    slug: "doors-bifold",
     image: "/images/bifold.jpeg",
     description:
       "Upgrade your home with modern bifold, entrance, and sliding glass doors that maximize natural light, functionality, and contemporary design for every living space.",
@@ -21,21 +21,21 @@ export const STATIC_PRODUCT_CATEGORIES = [
       "Enhance your commercial property with high-quality glass systems built for durability, safety, and professional appeal. Custom solutions designed to meet your business needs.",
   },
   {
-    name: "Glass railing",
+    name: "Glass Railing",
     slug: "glass-railing",
     image: "/images/glassrailing.jpeg",
     description:
       "Create open, secure spaces with premium glass railings for staircases, balconies, decks, and patios. Enjoy unobstructed views with lasting strength and modern elegance.",
   },
   {
-    name: "Cable system",
+    name: "Cable System",
     slug: "cable-system",
     image: "/images/cable.jpeg",
     description:
       "Achieve a sleek architectural look with durable cable railing systems designed for safety and minimal maintenance. Perfect for residential and commercial applications alike.",
   },
   {
-    name: "Window and doors",
+    name: "Window and Doors",
     slug: "window-and-doors",
     image: "/images/windows.jpeg",
     description:
@@ -49,7 +49,7 @@ export const STATIC_PRODUCT_CATEGORIES = [
       "Experience smart privacy with innovative switchable glass that changes from transparent to opaque instantly. Perfect for modern homes, offices, and luxury interiors.",
   },
   {
-    name: "Custom glass",
+    name: "Custom Glass",
     slug: "custom-glass",
     image: "/images/custom.jpeg",
     description:

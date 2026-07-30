@@ -1,6 +1,7 @@
 "use client";
 
 import { Box, Container, Heading, Image, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { STATIC_PRODUCT_CATEGORIES } from "@/constants/productCategories";
 import { MEGA_MENU_IMAGES } from "@/constants/megaMenuImages";
 
@@ -33,11 +34,17 @@ export default function MegaMenu() {
             <SimpleGrid columns={{ base: 2, md: 4 }} spacing={8}>
               {STATIC_PRODUCT_CATEGORIES.map((category, index) => (
                 <VStack
+                  as={NextLink}
                   key={category.name}
+                  href={`/products/category/${category.slug}`}
                   align="center"
                   justify="center"
                   spacing={3}
                   minH="130px"
+                  cursor="pointer"
+                  textDecoration="none"
+                  color="brand.black"
+                  _hover={{ textDecoration: "none", color: "brand.gray500" }}
                 >
                   <Image
                     src={MEGA_MENU_IMAGES[index]}

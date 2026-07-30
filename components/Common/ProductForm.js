@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Box,
   Container,
@@ -24,6 +24,7 @@ import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
 import NextLink from "next/link";
 import ImageUpload from "@/components/Common/ImageUpload";
+import { STATIC_PRODUCT_CATEGORIES } from "@/constants/productCategories";
 
 const MAX_THUMBNAIL_IMAGES = 5;
 
@@ -66,7 +67,7 @@ function emptyProduct() {
   return {
     title: "",
     slug: "",
-    category: "bi-fold-door",
+    category: "shower-doors",
     shortDescription: "",
     lifestyleImage: "",
     galleryImages: [],
@@ -107,23 +108,9 @@ function normalizeProduct(initialProduct) {
 
 export default function ProductForm({ initialProduct, mode = "create" }) {
   const [product, setProduct] = useState(() => normalizeProduct(initialProduct));
-  const [categories, setCategories] = useState([]);
-  const [categoryName, setCategoryName] = useState("");
   const [saving, setSaving] = useState(false);
   const toast = useToast();
   const router = useRouter();
-
-  useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => setCategories(data.categories || []))
-      .catch(() => toast({ status: "error", title: "Failed to load categories" }));
-  }, [toast]);
-
-  useEffect(() => {
-    const selected = categories.find((c) => c.slug === product.category);
-    if (selected) setCategoryName(selected.name);
-  }, [product.category, categories]);
 
   const update = (field, value) => setProduct((p) => ({ ...p, [field]: value }));
 
@@ -203,10 +190,6 @@ export default function ProductForm({ initialProduct, mode = "create" }) {
       toast({ status: "error", title: "Product Title is required" });
       return;
     }
-    if (!categoryName.trim()) {
-      toast({ status: "error", title: "Category name is required" });
-      return;
-    }
     setSaving(true);
 
     const galleryImages = product.galleryImages.map((url) => url.trim()).filter(Boolean).slice(0, MAX_THUMBNAIL_IMAGES);
@@ -222,7 +205,6 @@ export default function ProductForm({ initialProduct, mode = "create" }) {
 
     const payload = {
       ...product,
-      categoryName: categoryName.trim(),
       galleryImages,
       detailGalleryImages,
       hardwareConfigurations,
@@ -242,11 +224,6 @@ export default function ProductForm({ initialProduct, mode = "create" }) {
       if (!res.ok) throw new Error(data.error || "Failed to save product");
 
       toast({ status: "success", title: mode === "edit" ? "Product updated" : "Product created" });
-      setCategories((prev) =>
-        prev.map((c) =>
-          c.slug === product.category ? { ...c, name: categoryName.trim() } : c
-        )
-      );
       router.push("/admin");
       router.refresh();
     } catch (err) {
@@ -289,19 +266,14 @@ export default function ProductForm({ initialProduct, mode = "create" }) {
                   onChange={(e) => update("category", e.target.value)}
                   mb={3}
                 >
-                  {categories.map((c) => (
+                  {STATIC_PRODUCT_CATEGORIES.map((c) => (
                     <option key={c.slug} value={c.slug}>
                       {c.name}
                     </option>
                   ))}
                 </Select>
-                <Input
-                  value={categoryName}
-                  onChange={(e) => setCategoryName(e.target.value)}
-                  placeholder="Category name shown in breadcrumb"
-                />
                 <Text fontSize="xs" color="brand.gray500" mt={1}>
-                  Edit the name above to update the breadcrumb on the frontend for all products in this category.
+                  Select the category this product belongs to. It determines where the product appears in the Mega Menu and category pages.
                 </Text>
               </FormControl>
             </SimpleGrid>
