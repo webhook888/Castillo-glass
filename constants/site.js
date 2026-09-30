@@ -3,7 +3,8 @@ export const SITE_TAGLINE = "Premium Windows & Doors";
 
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Products", href: "/products", hasMegaMenu: true },
+  // Keep the mega-menu implementation in place; set this back to true to re-enable it.
+  { label: "Products", href: "/products", hasMegaMenu: false },
   { label: "Product Gallery", href: "/product-gallery" },
   { label: "Catalog", href: "/catalog" },
   { label: "About Us", href: "/about-us" },

@@ -9,7 +9,7 @@ export async function POST(request) {
   try {
     const { username, password } = await request.json();
 
-    if (!validateCredentials(username, password)) {
+    if (!(await validateCredentials(username, password))) {
       return NextResponse.json({ error: "Invalid username or password" }, { status: 401 });
     }
 
